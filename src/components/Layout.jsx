@@ -184,7 +184,7 @@ function Footer()
   return (
     <>
       {/* Weather & Social Bar */}
-      <div className="bg-white py-3 lg:px-12 px-4 shadow-sm border-t border-gray-200 border-b">
+      <div className="bg-white py-3 lg:px-12 px-4 shadow-sm border-t border-gray-200 border-b relative z-10">
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center text-sm">
           <div className="flex items-center text-gray-800 font-bold mb-3 md:mb-0">
             <span className="mr-2">On Campus:</span>
@@ -202,7 +202,7 @@ function Footer()
       </div>
 
       {/* Main Footer Content */}
-      <footer className="bg-primary text-gray-200 pt-8 pb-6 relative font-sans border-t-4 border-accent">
+      <footer className="bg-primary text-gray-200 pt-8 pb-6 relative z-10 font-sans border-t-4 border-accent">
         <div className="max-w-[1400px] mx-auto px-4 lg:px-12">
 
           {/* Section 1: Top Links */}
