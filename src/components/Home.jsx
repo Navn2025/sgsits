@@ -19,13 +19,13 @@ export default function Home()
       title: 'News',
       subtitle: 'Panorama of Events',
       icon: Newspaper,
-      dark: false,
+      dark: true,
     },
     {
       title: 'SGSITS Outreach',
       subtitle: 'Innovate. Inspire. Transform. Discover',
       icon: Landmark,
-      dark: true,
+      dark: false,
     },
   ];
 
@@ -38,10 +38,13 @@ export default function Home()
           style={{
             backgroundImage: 'var(--hero-img-url)',
             backgroundPosition: 'center 28%',
-            filter: 'brightness(1.08) contrast(1.03) saturate(1.02)',
+            filter: 'brightness(0.98) contrast(1.04) saturate(1.0)',
           }}
         ></div>
-        <div className="absolute inset-0 bg-black/28"></div>
+        <div
+          className="absolute inset-0"
+          style={{backgroundColor: 'rgba(0, 0, 0, var(--hero-overlay-opacity, 0.45))'}}
+        ></div>
         <div className="relative z-10 h-full flex items-center justify-center px-4 text-center">
           <div className="max-w-5xl">
             <p className="text-white/85 uppercase tracking-[0.3em] text-[8px] sm:text-[9px] mb-2 font-semibold">Shri G. S. Institute of Technology and Science</p>
@@ -54,23 +57,30 @@ export default function Home()
       </div>
 
       {/* Tiles strip - transparent, fully overlapping hero so hero image remains visible behind it */}
-      <div className="relative z-10 mt-[-105px] sm:mt-[-128px] md:mt-[-150px] pb-0 bg-transparent">
+      <div className="relative z-10 mt-[-48px] sm:mt-[-128px] md:mt-[-150px] pb-0 bg-transparent">
         <div className="relative mx-auto max-w-[1400px] px-4 lg:px-12">
           <div className="grid grid-cols-2 lg:grid-cols-4 shadow-[0_14px_40px_rgba(0,0,0,0.18)] rounded-t-lg overflow-hidden border border-gray-200/50">
-            {heroTiles.map((tile) =>
-            {
-              const Icon=tile.icon;
+            {heroTiles.map((tile) => {
+              const Icon = tile.icon;
+              let baseClass = tile.dark
+                ? 'bg-primary text-white border-r border-[#1a3857] hover:bg-[#08172c]'
+                : 'bg-white text-primary border-r border-gray-100 hover:bg-gray-50';
+
+              if (tile.title === 'News') {
+                baseClass = 'bg-primary text-white border-r border-[#1a3857] hover:bg-[#08172c] sm:bg-white sm:text-primary sm:border-gray-100 sm:hover:bg-gray-50';
+              }
+              if (tile.title === 'SGSITS Outreach') {
+                baseClass = 'bg-white text-primary border-r-0 border-gray-100 hover:bg-gray-50 sm:bg-primary sm:text-white sm:border-[#1a3857] sm:hover:bg-[#08172c]';
+              }
+
               return (
                 <div
                   key={tile.title}
-                  className={`h-[105px] sm:h-[128px] md:h-[150px] flex flex-col items-center justify-center text-center px-3 sm:px-4 transition-all duration-300 hover:z-20 ${tile.dark
-                    ? 'bg-primary text-white border-r border-[#1a3857] hover:bg-[#08172c]'
-                    :'bg-white text-primary border-r border-gray-100 hover:bg-gray-50'
-                    } ${tile.title==='SGSITS Outreach'? 'border-r-0':''}`}
+                  className={`min-h-[118px] sm:h-[128px] md:h-[150px] flex flex-col items-center justify-center text-center px-3 py-4 sm:px-4 transition-all duration-300 hover:z-20 ${baseClass}`}
                 >
-                  <p className="font-bold uppercase text-[10px] sm:text-sm md:text-base tracking-wider mb-1 sm:mb-2">{tile.title}</p>
+                  <p className="font-bold uppercase text-[10px] sm:text-sm md:text-base tracking-[0.18em] mb-1 sm:mb-2">{tile.title}</p>
                   <Icon size={28} className="mb-1 sm:mb-2 sm:!w-[36px] sm:!h-[36px]" strokeWidth={2} />
-                  <p className="text-[9px] sm:text-[11px] md:text-[13px] leading-snug max-w-[210px] opacity-90">{tile.subtitle}</p>
+                  <p className="text-[9px] sm:text-[11px] md:text-[13px] leading-snug max-w-[210px] opacity-90 text-balance">{tile.subtitle}</p>
                 </div>
               );
             })}

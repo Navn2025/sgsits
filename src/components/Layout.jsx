@@ -6,31 +6,33 @@ import Chatbot from './Chatbot';
 function TopBar()
 {
   return (
-    <div className="bg-primary text-white text-xs md:text-sm py-2 px-4 w-full">
-      <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
-        <div className="flex space-x-4 md:space-x-6">
+    <div className="bg-primary text-white text-xs md:text-sm py-2 shadow-sm w-full">
+      <div className="w-full px-4 lg:px-12 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-between sm:items-center">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 md:gap-x-6">
           <a href="#" className="hover:text-accent transition-colors">Students</a>
           <a href="#" className="hover:text-accent transition-colors">Faculty</a>
           <a href="#" className="hover:text-accent transition-colors">Alumni</a>
           <a href="#" className="hover:text-accent transition-colors">Contact</a>
         </div>
-        <div className="flex space-x-4 items-center mt-2 sm:mt-0">
-          <button className="flex items-center hover:text-accent transition-colors">
-            <Search size={14} className="mr-1" />
-            <span className="hidden sm:inline">Search</span>
-          </button>
-          <button className="flex items-center hover:text-accent transition-colors">
-            <Accessibility size={14} className="mr-1" />
-            <span className="hidden sm:inline">A- / A / A+</span>
-          </button>
+        <div className="flex items-center justify-between gap-2 sm:justify-end sm:gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <button className="flex items-center hover:text-accent transition-colors">
+              <Search size={14} className="sm:mr-1" />
+              <span className="hidden sm:inline">Search</span>
+            </button>
+            <button className="flex items-center hover:text-accent transition-colors">
+              <Accessibility size={14} className="sm:mr-1" />
+              <span className="hidden sm:inline">A- / A / A+</span>
+            </button>
+          </div>
           <Link
             to="/login"
-            className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-1 rounded-full text-white font-semibold text-xs transition-all"
+            className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-1.5 rounded-full text-white font-semibold text-xs transition-all shrink-0"
           >
             <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3" />
             </svg>
-            Login
+            <span>Login</span>
           </Link>
         </div>
       </div>
@@ -40,19 +42,53 @@ function TopBar()
 
 function LogoBanner({onMobileToggle, mobileOpen})
 {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      // Only apply the color change on mobile (< 1024px)
+      if (window.innerWidth < 1024) {
+        setScrolled(window.scrollY > 80);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
+  const isBlue = scrolled; // only true on mobile after scrolling
+
   return (
-    <div className="w-full bg-white z-20 border-b border-gray-100">
-      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-3 flex justify-between items-center">
-        <div className="flex items-center space-x-4 sm:space-x-5">
-          <div className="w-[75px] sm:w-[90px] h-[75px] sm:h-[90px] shrink-0">
+    <div
+      className="w-full border-b sticky top-0 z-50 lg:static lg:z-20 lg:bg-white lg:border-gray-100 transition-colors duration-300"
+      style={{
+        backgroundColor: isBlue ? 'var(--color-primary)' : 'white',
+        borderBottomColor: isBlue ? 'rgba(255,255,255,0.15)' : '#f3f4f6',
+        boxShadow: isBlue ? '0 2px 12px rgba(0,0,0,0.25)' : '0 1px 3px rgba(0,0,0,0.08)',
+      }}
+    >
+      <div className="w-full px-4 lg:px-12 py-3 flex items-center justify-between gap-3 sm:gap-4">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+          <div className={`shrink-0 rounded-full flex items-center justify-center transition-all duration-300 ${isBlue ? 'w-[46px] h-[46px] bg-white p-1 shadow-md' : 'w-[58px] h-[58px] sm:w-[90px] sm:h-[90px]'}`}>
             <img src="/assets/image.png" alt="SGSITS Logo" className="w-full h-full object-contain" />
           </div>
-          <div>
-            <h1 className="text-primary font-bold text-[19px] sm:text-[22px] lg:text-[26px] leading-[1.1] tracking-tight">
-              Shri Govindram Seksaria Institute of <br className="hidden lg:block lg:mb-1" />
-              Technology and Science
+          <div className="min-w-0">
+            <h1
+              className="font-bold text-[13px] leading-[1.2] tracking-tight sm:text-[22px] lg:text-[26px] transition-colors duration-300"
+              style={{ color: isBlue ? '#ffffff' : 'var(--color-primary)' }}
+            >
+              Shri Govindram Seksaria Institute of{' '}
+              <span className="block sm:inline">Technology and Science</span>
             </h1>
-            <p className="text-gray-600 font-bold text-[10px] sm:text-xs mt-1 uppercase tracking-[0.03em] hidden md:block">
+            <p
+              className="font-bold text-[10px] sm:text-xs mt-1 uppercase tracking-[0.03em] hidden md:block transition-colors duration-300"
+              style={{ color: isBlue ? 'rgba(255,255,255,0.7)' : '#6b7280' }}
+            >
               Govt. Aided Autonomous Institute, Indore (M.P.) - Estd. 1952
             </p>
           </div>
@@ -63,17 +99,19 @@ function LogoBanner({onMobileToggle, mobileOpen})
           </div>
         </div>
         <button
-          className="lg:hidden text-primary p-2 hover:bg-gray-100 rounded transition-colors"
+          className={`lg:hidden p-2 rounded transition-colors shrink-0 ${isBlue ? 'text-white hover:bg-white/20' : 'text-primary hover:bg-gray-100'}`}
           onClick={onMobileToggle}
+          aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
         >
-          {mobileOpen? <X size={26} strokeWidth={2.5} />:<Menu size={26} strokeWidth={2.5} />}
+          {mobileOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
         </button>
       </div>
     </div>
+
   );
 }
 
-function StickyNav({mobileOpen})
+function StickyNav({mobileOpen, onMobileClose})
 {
   const [navVisible, setNavVisible]=useState(true);
   const [lastScrollY, setLastScrollY]=useState(0);
@@ -137,7 +175,7 @@ function StickyNav({mobileOpen})
           borderTopColor: isStuck? 'rgba(255,255,255,0.15)':'#e5e7eb',
         }}
       >
-        <nav className="max-w-[1400px] mx-auto px-4 lg:px-8 flex flex-wrap text-[15.5px] font-semibold tracking-wide">
+        <nav className="w-full px-4 lg:px-12 flex flex-wrap text-[15.5px] font-semibold tracking-wide">
           {navLinks.map((link) => (
             <div key={link.name} className="relative group cursor-pointer">
               <div
@@ -164,16 +202,59 @@ function StickyNav({mobileOpen})
 
       {/* Mobile Nav Menu */}
       {mobileOpen&&(
-        <nav className="lg:hidden bg-white border-t border-gray-100 py-2 text-primary font-medium w-full shadow-xl overflow-y-auto max-h-[70vh]">
-          {navLinks.map((link) => (
-            <div key={link.name} className="border-b border-gray-50 last:border-0">
-              <div className="flex justify-between items-center px-6 py-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors">
-                {link.name}
-                {link.hasDropdown&&<ChevronDown size={18} className="text-gray-400" />}
+        <div className="lg:hidden fixed inset-0 z-[120] bg-white">
+          <div className="flex h-full flex-col overflow-y-auto">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-primary bg-primary px-4 py-4 text-white">
+              <div className="flex min-w-0 items-center gap-3 pr-3">
+                <div className="h-11 w-11 shrink-0 rounded-full bg-white p-1">
+                  <img src="/assets/image.png" alt="SGSITS Logo" className="h-full w-full object-contain" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-bold leading-tight text-white sm:text-base">
+                    Shri G.S. Institute Of Technology &amp; Science
+                  </p>
+                </div>
               </div>
+              <button
+                className="rounded-full border border-white/20 p-2 text-white transition-colors hover:bg-white/10"
+                onClick={onMobileClose}
+                aria-label="Close navigation menu"
+              >
+                <X size={22} strokeWidth={2.5} />
+              </button>
             </div>
-          ))}
-        </nav>
+
+            <nav className="flex-1 px-4 py-3 text-primary bg-white">
+              {navLinks.map((link) => (
+                <div key={link.name} className="border-b border-gray-200 last:border-0">
+                  <div className="flex items-center justify-between px-1 py-4 text-base font-semibold tracking-wide">
+                    <span>{link.name}</span>
+                    {link.hasDropdown&&<ChevronDown size={18} className="text-gray-500" />}
+                  </div>
+                </div>
+              ))}
+            </nav>
+
+            <div className="border-t border-gray-200 bg-white px-4 py-5 text-primary">
+              <div className="grid grid-cols-2 gap-3 text-sm font-medium">
+                <a href="#" className="rounded-xl border border-gray-200 bg-white px-4 py-3 transition-colors hover:bg-gray-50">Students</a>
+                <a href="#" className="rounded-xl border border-gray-200 bg-white px-4 py-3 transition-colors hover:bg-gray-50">Faculty</a>
+                <a href="#" className="rounded-xl border border-gray-200 bg-white px-4 py-3 transition-colors hover:bg-gray-50">Alumni</a>
+                <a href="#" className="rounded-xl border border-gray-200 bg-white px-4 py-3 transition-colors hover:bg-gray-50">Contact</a>
+              </div>
+
+              <Link
+                to="/login"
+                className="mt-4 flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#08172c]"
+              >
+                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3" />
+                </svg>
+                Login
+              </Link>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
@@ -308,6 +389,7 @@ function ThemeSwitcher()
   const [accentColor, setAccentColor]=useState('#D4AF37');
   const [headingColor, setHeadingColor]=useState('#1f2937');
   const [heroImgUrl, setHeroImgUrl]=useState('/assets/media__1776272596244.png');
+  const [heroOverlayOpacity, setHeroOverlayOpacity]=useState(0.45);
   const [navBgDefault, setNavBgDefault]=useState('#ffffff');
   const [navBgSticky, setNavBgSticky]=useState('#0B1F3A');
   const [navTextDefault, setNavTextDefault]=useState('#1f2937');
@@ -340,6 +422,13 @@ function ThemeSwitcher()
   {
     setHeroImgUrl(e.target.value);
     updateCssVar('--hero-img-url', `url('${e.target.value}')`);
+  };
+
+  const handleHeroOverlayChange=(e) =>
+  {
+    const value=Number.parseFloat(e.target.value);
+    setHeroOverlayOpacity(value);
+    updateCssVar('--hero-overlay-opacity', value.toString());
   };
 
   return (
@@ -421,6 +510,19 @@ function ThemeSwitcher()
           <div className="border-t border-gray-100 pt-3">
             <label className="text-[11px] font-semibold text-gray-700 block mb-1">Hero Image Overwrite (URL)</label>
             <input type="text" value={heroImgUrl} onChange={handleHeroImgChange} placeholder="https://..." className="w-full text-xs p-2.5 border border-gray-300 rounded focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-inner" />
+
+            <label className="text-[11px] font-semibold text-gray-700 block mt-3 mb-1">
+              Home Hero Black Effect - {Math.round(heroOverlayOpacity*100)}%
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="0.9"
+              step="0.05"
+              value={heroOverlayOpacity}
+              onChange={handleHeroOverlayChange}
+              className="w-full accent-gray-800 h-1.5 rounded-full"
+            />
           </div>
 
           <button
@@ -430,6 +532,7 @@ function ThemeSwitcher()
               setAccentColor('#D4AF37'); updateCssVar('--color-accent', '#D4AF37');
               setHeadingColor('#1f2937'); updateCssVar('--color-heading', '#1f2937');
               setHeroImgUrl('/assets/media__1776272596244.png'); updateCssVar('--hero-img-url', "url('/assets/media__1776272596244.png')");
+              setHeroOverlayOpacity(0.45); updateCssVar('--hero-overlay-opacity', '0.45');
               setNavBgDefault('#ffffff'); updateCssVar('--nav-bg-default', '#ffffff');
               setNavBgSticky('#0B1F3A'); updateCssVar('--nav-bg-sticky', '#0B1F3A');
               setNavTextDefault('#1f2937'); updateCssVar('--nav-text-default', '#1f2937');
@@ -453,14 +556,30 @@ export function DesktopLayout({children})
 {
   const [mobileOpen, setMobileOpen]=useState(false);
 
+  useEffect(() =>
+  {
+    if (!mobileOpen)
+    {
+      document.body.style.overflow='';
+      return;
+    }
+
+    document.body.style.overflow='hidden';
+
+    return () =>
+    {
+      document.body.style.overflow='';
+    };
+  }, [mobileOpen]);
+
   return (
     <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-sgsits-bg">
       <TopBar />
       <LogoBanner onMobileToggle={() => setMobileOpen(o => !o)} mobileOpen={mobileOpen} />
-      <StickyNav mobileOpen={mobileOpen} />
+      <StickyNav mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
       {/* Announcements Marquee */}
-      <div className="w-full bg-[#1a1a1a] text-gray-300 flex items-center shadow-inner border-t border-gray-800">
-        <div className="bg-black text-white px-4 lg:px-8 py-2 font-bold text-[11px] sm:text-[13px] uppercase tracking-wider shrink-0 flex items-center sm:relative absolute z-10 left-0 h-full border-r border-[#333]">
+      <div className="relative w-full bg-[#1a1a1a] text-gray-300 flex items-center shadow-inner border-t border-gray-800">
+        <div className="bg-black text-white px-4 lg:px-8 py-2 font-bold text-[11px] sm:text-[13px] uppercase tracking-wider shrink-0 flex items-center sm:relative absolute inset-y-0 left-0 z-10 border-r border-[#333]">
           Announcements
         </div>
         <div className="flex-1 overflow-hidden sm:ml-0 ml-[135px] py-2 flex items-center">
@@ -476,7 +595,7 @@ export function DesktopLayout({children})
       <main className="flex-grow">{children}</main>
       <Footer />
       <ThemeSwitcher />
-      <Chatbot />
+      {!mobileOpen&&<Chatbot />}
     </div>
   );
 }
