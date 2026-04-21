@@ -17,6 +17,14 @@
   --login-panel-text: #ffffff;
   --login-form-bg: #ffffff;
   --login-btn-bg: #0b1f3a;
+  --prof-card-bg: #eaf1fb;
+  --prof-name-color: #0b1f3a;
+  --prof-year-color: #0d3c80;
+  --prof-dept-color: #1f3f6f;
+  --prof-link-color: #0b2f67;
+  --prof-ribbon-color: #244b7b;
+  --prof-footer-img-url: url("https://images.unsplash.com/photo-1761872802877-f4a229449340?q=80&w=1333&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  --prof-footer-overlay-opacity: 0.22;
 }
 
 body {

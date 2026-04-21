@@ -157,6 +157,7 @@ function StickyNav({mobileOpen, onMobileClose})
     {name: 'Campus Life', hasDropdown: true},
     {name: 'Placements', hasDropdown: false},
     {name: 'About', hasDropdown: true},
+    {name: 'Institute Professors', hasDropdown: false, to: '/institute-professors'},
   ];
 
   return (
@@ -178,13 +179,24 @@ function StickyNav({mobileOpen, onMobileClose})
         <nav className="w-full px-4 lg:px-12 flex flex-wrap text-[15.5px] font-semibold tracking-wide">
           {navLinks.map((link) => (
             <div key={link.name} className="relative group cursor-pointer">
-              <div
-                className="flex items-center py-3 pr-8 transition-colors border-b-[3px] border-transparent group-hover:border-accent"
-                style={{color: isStuck? 'var(--nav-text-sticky)':'var(--nav-text-default)'}}
-              >
-                {link.name}
-                {link.hasDropdown&&<ChevronDown size={14} className="ml-1.5 opacity-60 group-hover:opacity-100 transition-opacity" />}
-              </div>
+              {link.to ? (
+                <Link
+                  to={link.to}
+                  className="flex items-center py-3 pr-8 transition-colors border-b-[3px] border-transparent group-hover:border-accent"
+                  style={{color: isStuck? 'var(--nav-text-sticky)':'var(--nav-text-default)'}}
+                >
+                  {link.name}
+                  {link.hasDropdown&&<ChevronDown size={14} className="ml-1.5 opacity-60 group-hover:opacity-100 transition-opacity" />}
+                </Link>
+              ) : (
+                <div
+                  className="flex items-center py-3 pr-8 transition-colors border-b-[3px] border-transparent group-hover:border-accent"
+                  style={{color: isStuck? 'var(--nav-text-sticky)':'var(--nav-text-default)'}}
+                >
+                  {link.name}
+                  {link.hasDropdown&&<ChevronDown size={14} className="ml-1.5 opacity-60 group-hover:opacity-100 transition-opacity" />}
+                </div>
+              )}
               {link.hasDropdown&&(
                 <div className="absolute top-[100%] left-0 w-60 bg-white border border-gray-100 shadow-[0_10px_25px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100]">
                   <div className="h-[3px] bg-primary w-full shadow-sm"></div>
@@ -227,10 +239,21 @@ function StickyNav({mobileOpen, onMobileClose})
             <nav className="flex-1 px-4 py-3 text-primary bg-white">
               {navLinks.map((link) => (
                 <div key={link.name} className="border-b border-gray-200 last:border-0">
-                  <div className="flex items-center justify-between px-1 py-4 text-base font-semibold tracking-wide">
-                    <span>{link.name}</span>
-                    {link.hasDropdown&&<ChevronDown size={18} className="text-gray-500" />}
-                  </div>
+                  {link.to ? (
+                    <Link
+                      to={link.to}
+                      onClick={onMobileClose}
+                      className="flex items-center justify-between px-1 py-4 text-base font-semibold tracking-wide"
+                    >
+                      <span>{link.name}</span>
+                      {link.hasDropdown&&<ChevronDown size={18} className="text-gray-500" />}
+                    </Link>
+                  ) : (
+                    <div className="flex items-center justify-between px-1 py-4 text-base font-semibold tracking-wide">
+                      <span>{link.name}</span>
+                      {link.hasDropdown&&<ChevronDown size={18} className="text-gray-500" />}
+                    </div>
+                  )}
                 </div>
               ))}
             </nav>
@@ -394,6 +417,14 @@ function ThemeSwitcher()
   const [navBgSticky, setNavBgSticky]=useState('#0B1F3A');
   const [navTextDefault, setNavTextDefault]=useState('#1f2937');
   const [navTextSticky, setNavTextSticky]=useState('#ffffff');
+  const [profCardBg, setProfCardBg]=useState('#eaf1fb');
+  const [profNameColor, setProfNameColor]=useState('#0b1f3a');
+  const [profYearColor, setProfYearColor]=useState('#0d3c80');
+  const [profDeptColor, setProfDeptColor]=useState('#1f3f6f');
+  const [profLinkColor, setProfLinkColor]=useState('#0b2f67');
+  const [profRibbonColor, setProfRibbonColor]=useState('#244b7b');
+  const [profFooterImgUrl, setProfFooterImgUrl]=useState('https://images.unsplash.com/photo-1761872802877-f4a229449340?q=80&w=1333&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  const [profFooterOverlayOpacity, setProfFooterOverlayOpacity]=useState(0.22);
 
   const updateCssVar=(name, value) =>
   {
@@ -525,6 +556,90 @@ function ThemeSwitcher()
             />
           </div>
 
+          <div className="border-t border-gray-100 pt-3 space-y-3">
+            <p className="text-[11px] font-bold text-gray-600 uppercase tracking-wider">Institute Professors</p>
+
+            <div className="flex items-center space-x-3">
+              <input type="color" value={profCardBg} onChange={(e) => {setProfCardBg(e.target.value); updateCssVar('--prof-card-bg', e.target.value);}} className="w-8 h-8 border-0 p-0 rounded cursor-pointer shadow-sm shrink-0" />
+              <div className="flex-1 text-xs">
+                <label className="font-semibold text-gray-700 block">Card Background</label>
+                <span className="text-gray-500 font-mono text-[10px]">{profCardBg.toUpperCase()}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <input type="color" value={profNameColor} onChange={(e) => {setProfNameColor(e.target.value); updateCssVar('--prof-name-color', e.target.value);}} className="w-8 h-8 border-0 p-0 rounded cursor-pointer shadow-sm shrink-0" />
+              <div className="flex-1 text-xs">
+                <label className="font-semibold text-gray-700 block">Name / Heading Color</label>
+                <span className="text-gray-500 font-mono text-[10px]">{profNameColor.toUpperCase()}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <input type="color" value={profYearColor} onChange={(e) => {setProfYearColor(e.target.value); updateCssVar('--prof-year-color', e.target.value);}} className="w-8 h-8 border-0 p-0 rounded cursor-pointer shadow-sm shrink-0" />
+              <div className="flex-1 text-xs">
+                <label className="font-semibold text-gray-700 block">Year / Accent Color</label>
+                <span className="text-gray-500 font-mono text-[10px]">{profYearColor.toUpperCase()}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <input type="color" value={profDeptColor} onChange={(e) => {setProfDeptColor(e.target.value); updateCssVar('--prof-dept-color', e.target.value);}} className="w-8 h-8 border-0 p-0 rounded cursor-pointer shadow-sm shrink-0" />
+              <div className="flex-1 text-xs">
+                <label className="font-semibold text-gray-700 block">Department Text</label>
+                <span className="text-gray-500 font-mono text-[10px]">{profDeptColor.toUpperCase()}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <input type="color" value={profLinkColor} onChange={(e) => {setProfLinkColor(e.target.value); updateCssVar('--prof-link-color', e.target.value);}} className="w-8 h-8 border-0 p-0 rounded cursor-pointer shadow-sm shrink-0" />
+              <div className="flex-1 text-xs">
+                <label className="font-semibold text-gray-700 block">Visit Link Color</label>
+                <span className="text-gray-500 font-mono text-[10px]">{profLinkColor.toUpperCase()}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <input type="color" value={profRibbonColor} onChange={(e) => {setProfRibbonColor(e.target.value); updateCssVar('--prof-ribbon-color', e.target.value);}} className="w-8 h-8 border-0 p-0 rounded cursor-pointer shadow-sm shrink-0" />
+              <div className="flex-1 text-xs">
+                <label className="font-semibold text-gray-700 block">Ribbon Icon Color</label>
+                <span className="text-gray-500 font-mono text-[10px]">{profRibbonColor.toUpperCase()}</span>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-100 pt-3">
+              <label className="text-[11px] font-semibold text-gray-700 block mb-1">Bottom Banner Image URL</label>
+              <input
+                type="text"
+                value={profFooterImgUrl}
+                onChange={(e) => {
+                  setProfFooterImgUrl(e.target.value);
+                  updateCssVar('--prof-footer-img-url', `url('${e.target.value}')`);
+                }}
+                placeholder="https://... or /assets/..."
+                className="w-full text-xs p-2.5 border border-gray-300 rounded focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-inner"
+              />
+
+              <label className="text-[11px] font-semibold text-gray-700 block mt-3 mb-1">
+                Bottom Banner Overlay - {Math.round(profFooterOverlayOpacity*100)}%
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="0.7"
+                step="0.05"
+                value={profFooterOverlayOpacity}
+                onChange={(e) =>
+                {
+                  const value=Number.parseFloat(e.target.value);
+                  setProfFooterOverlayOpacity(value);
+                  updateCssVar('--prof-footer-overlay-opacity', value.toString());
+                }}
+                className="w-full accent-gray-800 h-1.5 rounded-full"
+              />
+            </div>
+          </div>
+
           <button
             onClick={() =>
             {
@@ -537,6 +652,14 @@ function ThemeSwitcher()
               setNavBgSticky('#0B1F3A'); updateCssVar('--nav-bg-sticky', '#0B1F3A');
               setNavTextDefault('#1f2937'); updateCssVar('--nav-text-default', '#1f2937');
               setNavTextSticky('#ffffff'); updateCssVar('--nav-text-sticky', '#ffffff');
+              setProfCardBg('#eaf1fb'); updateCssVar('--prof-card-bg', '#eaf1fb');
+              setProfNameColor('#0b1f3a'); updateCssVar('--prof-name-color', '#0b1f3a');
+              setProfYearColor('#0d3c80'); updateCssVar('--prof-year-color', '#0d3c80');
+              setProfDeptColor('#1f3f6f'); updateCssVar('--prof-dept-color', '#1f3f6f');
+              setProfLinkColor('#0b2f67'); updateCssVar('--prof-link-color', '#0b2f67');
+              setProfRibbonColor('#244b7b'); updateCssVar('--prof-ribbon-color', '#244b7b');
+              setProfFooterImgUrl('https://images.unsplash.com/photo-1761872802877-f4a229449340?q=80&w=1333&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); updateCssVar('--prof-footer-img-url', "url('https://images.unsplash.com/photo-1761872802877-f4a229449340?q=80&w=1333&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')");
+              setProfFooterOverlayOpacity(0.22); updateCssVar('--prof-footer-overlay-opacity', '0.22');
             }}
             className="text-[11px] font-bold text-red-600 hover:underline self-start mt-2"
           >
